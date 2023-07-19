@@ -10,54 +10,12 @@
             <span v-else class="username">{{ name?.charAt(0) }}</span>
             <div class="company-info">
               <div class="title">
-                安徽瑞佑自动化科技有限公司
-                <span>体验版</span>
+                {{$t('dashboard.company')}}
               </div>
               <div class="depart">{{ name }} ｜ {{ company }}-{{ departmentName }}</div>
             </div>
           </div>
         </div>
-        <!-- <div class="station-info">
-              <el-row :gutter="20" style="margin-right: 15px;margin-left: -5px" type="flex" v-loading="loading">
-                <el-col v-for="(item, index) in stationlist" :key="index" :span="6">
-                  <el-card class="box-card" shadow="always" :body-style="{ padding: '0px' }" :style="setStyle(item.roadName)">
-                     <div slot="header" class="header">
-                      <span class="label" >{{ item.name }}</span>
-                    </div> 
-                    <div style="margin: 15px">
-                      <div><div class="card-label">站点编号</div><span>{{item.stationid}}</span></div>
-                      <div><div class="card-label">站点状态</div>
-                      <template >
-                      <span v-if="item.status ==1">正常</span>
-                      <span v-else-if="item.status == 2">执行中</span>
-                      <span v-else-if="item.status == 3">故障</span>
-                      <span v-else>无</span>
-                      </template>
-                      </div>
-                      <div><div class="card-label">任务信息</div><span>{{item.info}}</span></div>
-                      <div><div class="card-label">故障信息</div><span>{{item.warn}}</span></div>
-                    </div>
-                    <div class="footer">
-                      <div style="display: flex;align-items: center">
-                        <el-button type="text" :style="item.status === '1' || item.status === '2' ? 'color: #18c8bd' : 'color: rgb(34, 125, 251)'" style="color: #18c8bd">启动</el-button>
-                      </div>
-                      <div style="display:flex; align-items: center;color: #cccccc">|</div>
-                      <div style="display: flex;align-items: center">
-                        <el-button type="text" :style="item.status === '2' ? 'color: #18c8bd' : 'color: rgb(34, 125, 251)'" style="color: #18c8bd">停止</el-button>
-                      </div>
-                      <div style="display:flex; align-items: center;color: #cccccc">|</div>
-                      <div style="display: flex;align-items: center">
-                        <el-button type="text" :style="item.status === '2' ? 'color: #18c8bd' : 'color: rgb(34, 125, 251)'" style="color: #18c8bd">查看详情</el-button>
-                      </div>
-                      <div style="display:flex; align-items: center;color: #cccccc">|</div>
-                      <div style="display: flex;align-items: center">
-                        <el-button type="text" :style="item.status === '2' ? 'color: #18c8bd' : 'color: rgb(34, 125, 251)'" style="color: #18c8bd">清除报警</el-button>
-                      </div>
-                    </div> 
-                  </el-card>
-                </el-col>
-              </el-row>
-      </div> -->
           </div>
       </div>
     </div>
@@ -79,11 +37,6 @@ export default {
         pagesize: 10,
       },
       timer: null,
-      stationlist:[{"name":"1号堆垛机","stationid":"1","status":"2","roadName":"2","stationstatus":"运行","info":"执行搬运任务","warn":"无故障"},
-                  {"name":"1号提升机","stationid":"2","status":"2","roadName":"2","stationstatus":"运行","info":"到达取货层","warn":"无故障"},
-                  {"name":"2号堆垛机","stationid":"3","status":"1","roadName":"1","stationstatus":"运行","info":"空闲","warn":"无故障"},
-                  {"name":"2号提升机","stationid":"4","status":"2","roadName":"2","stationstatus":"运行","info":"执行卸货任务","warn":"无故障"},
-                  {"name":"3号堆垛机","stationid":"5","status":"3","roadName":"3","stationstatus":"停止","info":"执行取货任务","warn":"当前为取货任务，但货叉上有货"}],
       list:[]
     }
   },
@@ -116,26 +69,14 @@ export default {
   },
   methods: {
     async getDeviceList() {
-      console.log("进入getDeviceList方法")
       const {total,info} = await getDeviceList(this.queryParams)
-      console.log("打印设备列表信息",{info})
-      console.log("打印记录条数",{total})
-      console.log(info[0])
       this.list = info
-      console.log("list",this.list)
       this.total = total
-      console.log("rows",this.total)
     },
     async getUserInfo() {
-      console.log("进入getUserInfo方法")
       const {info} = await getUserInfo()
-      console.log("打印设备列表信息",{info})
-      console.log("打印记录条数",{total})
-      console.log(info[0])
       this.list = info
-      console.log("list",this.list)
       this.total = total
-      console.log("rows",this.total)
     },
     
   }

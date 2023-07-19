@@ -2,19 +2,17 @@
   <div class="login-container">
     <div class="logo" />
     <div class="form">
-      <h1>登录</h1>
+      <h1>{{$t('login.title')}}</h1>
       <el-card shadow="never" class="login-card">
-        <!--登录表单-->
-        <!-- el-form > el-form-item > el-input -->
         <el-form ref="form" :model="loginForm" :rules="loginRules">
           <el-form-item prop="mobile">
-            <el-input v-model="loginForm.username" placeholder="请输入用户名" />
+            <el-input v-model="loginForm.username" :placeholder="$t('login.usernameplaceholder')"/>
           </el-form-item>
           <el-form-item prop="password">
-            <el-input v-model="loginForm.password" show-password placeholder="请输入密码" />
+            <el-input v-model="loginForm.password" show-password :placeholder="$t('login.passwordplaceholder')" />
           </el-form-item>
           <el-form-item>
-            <el-button style="width:350px" type="primary" @click="login">登录</el-button>
+            <el-button style="width:350px" type="primary" @click="login">{{ $t('login.button') }}</el-button>
           </el-form-item>
         </el-form>
       </el-card>
@@ -33,22 +31,22 @@ export default {
       loginRules: {
         username: [{
           required: true,
-          message: '请输入用户名',
+          message: this.$t('login.usernameplaceholder'),
           trigger: 'blur'
         }, {
           pattern: /^[A-Za-z]+$/,
-          message: '用户名格式不正确',
+          message: this.$t('login.usernamecheck'),
           trigger: 'blur'
 
         }],
         password: [{
           required: true,
-          message: '请输入密码',
+          message: this.$t('login.passwordplaceholder'),
           trigger: 'blur'
         }, {
           min: 6,
           max: 16,
-          message: '密码长度应该为6-16位之间',
+          message: this.$t('login.passwordcheck'),
           trigger: 'blur'
 
         }],
@@ -57,14 +55,9 @@ export default {
   },
   methods: {
     login() {
-      console.log("进入登录按钮的点击事件")
       this.$refs.form.validate(async(isOK) => {
         if (isOK) {
-          console.log(this.loginForm)
           await this.$store.dispatch('user/login', this.loginForm)
-          // Vuex 中的action 返回的promise
-          // 跳转主页
-          console.log("跳转主页")
           this.$router.push('/')
         }
       })

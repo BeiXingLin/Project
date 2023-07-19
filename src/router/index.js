@@ -1,4 +1,5 @@
 import Vue from 'vue'
+import i18n from '@/lang'
 import Router from 'vue-router'
 
 Vue.use(Router)
@@ -16,7 +17,7 @@ import monitorRouter from './modules/monitor'
 import dashboardRouter from './modules/dashboard'
 
 
- console.log("进入router里面的index.js")
+
  //定义静态路由数组
 export const constantRoutes = [
   
@@ -40,7 +41,7 @@ export const constantRoutes = [
       path: 'dashboard',
       name: 'Dashboard',
       component: () => import('@/views/dashboard/index'),
-      meta: { title: '首页', icon: 'dashboard' }
+      meta: { title: i18n.t('menu.dashboard'), icon: 'dashboard' }
     }
     ]
   },
@@ -52,7 +53,7 @@ export const constantRoutes = [
       path: 'monitor',
       name: 'Monitor',
       component: () => import('@/views/monitor/index'),
-      meta: { title: '设备监控', icon: 'guide' },
+      meta: { title: i18n.t('menu.guide'), icon: 'guide' },
     }
     ]
   },
@@ -63,8 +64,8 @@ export const constantRoutes = [
     children: [{
       path: 'device',
       name: 'Device',
-      component: () => import('@/views/device/index'),
-      meta: { title: '设备管理', icon: 'device' },
+      component: () => import('@/views/station/index'),
+      meta: { title: i18n.t('menu.device'), icon: 'device' },
     }
     ]
   },
@@ -73,12 +74,12 @@ export const constantRoutes = [
     component: Layout,
     redirect: '/dashboard',
     meta: {
-      title: '任务管理',
+      title: i18n.t('menu.task'),
       icon: 'task'
     },
     children: [
-      { path: 'task', component: ()=>import('@/views/task/index'), name: 'taskInfo', meta: { title: '任务信息' }},
-      { path: 'taskdetail', component: ()=>import('@/views/task/taskdetail'), name: 'taskAnalysis', meta: { title: '任务汇总'}},
+      { path: 'task', component: ()=>import('@/views/task/index'), name: 'taskInfo', meta: { title: i18n.t('menu.taskInfo') }},
+      { path: 'taskdetail', component: ()=>import('@/views/task/taskdetail'), name: 'taskAnalysis', meta: { title: i18n.t('menu.taskAnalysis')}},
     ]
   },
   {
@@ -89,7 +90,7 @@ export const constantRoutes = [
       path: 'interface',
       name: 'Interface',
       component: () => import('@/views/interface/index'),
-      meta: { title: '接口管理', icon: 'interface' }
+      meta: { title:i18n.t('menu.interface') , icon: 'interface' }
     }
     ]
   },
@@ -98,12 +99,12 @@ export const constantRoutes = [
     component: Layout,
     redirect: '/dashboard',
     meta: {
-      title: '报警信息',
+      title: i18n.t('menu.warning'),
       icon: 'warning'
     },
     children: [
-      { path: 'warning', component: ()=>import('@/views/warning/index'), name: 'warningInfo', meta: { title: '报警信息' , meta:'guide'}},
-      { path: 'warningdetail', component: ()=>import('@/views/warning/warningdetail'), name: 'warningAnalysis', meta: { title: '报警统计', meta:'guide' }},
+      { path: 'warning', component: ()=>import('@/views/warning/index'), name: 'warningInfo', meta: { title: i18n.t('menu.warningInfo') , meta:'guide'}},
+      { path: 'warningdetail', component: ()=>import('@/views/warning/warningdetail'), name: 'warningAnalysis', meta: { title: i18n.t('menu.warningAnalysis'), meta:'guide' }},
     ]
     
   },
@@ -112,12 +113,11 @@ export const constantRoutes = [
     component: Layout,
     redirect: '/dashboard',
     meta: {
-      title: '系统设置',
+      title: i18n.t('menu.setting'),
       icon: 'el-icon-s-tools'
     },
     children: [
-      { path: 'setting', component: ()=>import('@/views/setting/index'), name: 'userCon', meta: { title: '用户管理' , icon:"el-icon-user"}},
-      // { path: 'setting', component: ()=>import('@/views/setting/index'), name: 'roleCon', meta: { title: '权限管理', icon:"el-icon-s-opportunity"}},
+      { path: 'setting', component: ()=>import('@/views/setting/index'), name: 'userCon', meta: { title:i18n.t('menu.userCon') , icon:"el-icon-user"}},
     ]
     
   },

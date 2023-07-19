@@ -6,12 +6,11 @@
 </template>
 
 <script>
-console.log("把App.vue组件暴露出来")
 export default {
   name: 'App'
 }
 </script>
-<!-- 进度条的颜色 -->
+
 <style>
 #nprogress .bar {
  

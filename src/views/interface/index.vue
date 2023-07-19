@@ -3,50 +3,46 @@
     <el-card class="box-card">
 				<el-row :gutter="20">
 					<el-col :span="6">
-						选择站点
-						<el-select v-model="project_id" placeholder="请选择对应站点">
+						{{$t('interface.selstation') }}
+						<el-select v-model="project_id" :placeholder="$t('interface.selplaceholder')">
 							<el-option v-for="item in projectList" :key="item.id" :label="item.name" :value="item.id">
 							</el-option>
 						</el-select>
 					</el-col>
 					<el-col :span="2">
-						<!-- 添加接口的按钮 -->
-						<el-button type="success" icon='el-icon-plus' @click='dialogCreate="true"'>新建接口</el-button>
+						<el-button type="success" icon='el-icon-plus' @click='dialogCreate="true"'>{{$t('interface.addinterface') }}</el-button>
 					</el-col>
           <el-col :span="2">
-						<!-- 删除接口的按钮 -->
-						<el-button type="danger" icon='el-icon-edit' @click='dialogEdit="true"'>编辑接口</el-button>
+						<el-button type="danger" icon='el-icon-edit' @click='dialogEdit="true"'>{{$t('interface.editinterface') }}</el-button>
 					</el-col>
           <el-col :span="2">
-						<!-- 删除接口的按钮 -->
-						<el-button type="warning" icon='el-icon-delete' @click='dialogDel="true"'>删除接口</el-button>
+						<el-button type="warning" icon='el-icon-delete' @click='dialogDel="true"'>{{$t('interface.delinterface') }}</el-button>
 					</el-col>
 				</el-row>
 				<!-- 接口列表页 -->
 				<el-table :data="projectList" style="width: 100%;margin-bottom: 10px;">
 					<el-table-column prop="id" label="ID" width="80" sortable>
 					</el-table-column>
-					<el-table-column prop="name" label="接口名" width="100" align="center">
+					<el-table-column prop="name" :label="$t('interface.interfacename')" width="100" align="center">
 					</el-table-column>
-					<el-table-column prop="desc" label="描述信息" width="100" align="center">
+					<el-table-column prop="desc" :label="$t('interface.desc')" width="100" align="center">
 					</el-table-column>
 					<el-table-column prop="url" label="URL" width="280" align="center">
 					</el-table-column>
-					<el-table-column prop="type" label="接口类型" width="80" align="center">
+					<el-table-column prop="type" :label="$t('interface.type')" width="80" align="center">
 					</el-table-column>
-					<el-table-column prop="InParams" label="入参" width="280" align="center">
+					<el-table-column prop="InParams" :label="$t('interface.InParams')" width="280" align="center">
 					</el-table-column>
-					<el-table-column prop="OutParams" label="出参" width="280" align="center">
+					<el-table-column prop="OutParams" :label="$t('interface.OutParams')" width="280" align="center">
 					</el-table-column>
-					<el-table-column prop="provider" label="提供方" width="80" align="center">
+					<el-table-column prop="provider" :label="$t('interface.provider')" width="80" align="center">
 					</el-table-column>
-          <el-table-column prop="caller" label="调用方" width="80" align="center">
+          <el-table-column prop="caller" :label="$t('interface.caller')" width="80" align="center">
 					</el-table-column>
-					<el-table-column label="操作">
+					<el-table-column :label="$t('interface.con')">
 						<template slot-scope="scope">
-							<el-button size="mini" @click="proEdit(scope.row)">测试</el-button>
-							<el-button size="mini" type="danger" @click="proDelete(scope.row.id)">删除
-							</el-button>
+							<el-button size="mini" @click="proEdit(scope.row)">{{ $t('interface.test')}}</el-button>
+							<el-button size="mini" type="danger" @click="proDelete(scope.row.id)">{{$t('interface.del')}}</el-button>
 						</template>
 					</el-table-column>
 				</el-table>

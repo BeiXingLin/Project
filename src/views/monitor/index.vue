@@ -127,7 +127,7 @@ export default {
   created () {
     this.timer = window.setInterval(() => {
         setTimeout(this.getStationInfo(this.queryParams), 0);
-      }, 1000);
+      }, 3000);
 
      
   },

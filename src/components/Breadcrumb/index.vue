@@ -12,7 +12,6 @@
 <script>
 import pathToRegexp from 'path-to-regexp'
 
-
 export default {
   
   data() {
