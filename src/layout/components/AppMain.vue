@@ -11,6 +11,8 @@ export default {
   name: 'AppMain',
   computed: {
     key() {
+      console.log("进入AppMain里面的key()计算属性")
+      console.log("this.$route.path为",this.$route.path)
       return this.$route.path
     }
   }

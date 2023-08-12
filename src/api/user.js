@@ -1,23 +1,47 @@
 import request from '@/utils/request'
 
-console.log("进入api里面的user.js的login")
+// 用户登录
 export function login(data) {
+  console.log("进入user.js")
   console.log(data)
   return request({
-    url: '/User/Login',
-    method: 'post',
-    data
-  })
-}
-console.log("进入api里面的user.js的getUserInfo")
-export function getUserInfo() {
-  return request({
-    url: '/User/profile',
+    url: `Authorize/Login?User=${data.User}&PassWord=${data.PassWord}`,
     method: 'get',
   })
 }
 
-console.log("进入api里面的user.js的getInfo")
+// 获取用户信息
+export function getUserInfo() {
+  return request({
+    url: '/Authorize/GetUerInfo',
+    method: 'get',
+  })
+}
+
+// 添加新用户
+export function addUser(data) {
+  return request({
+    url: `/Authorize/AddNewUserInfo?strUserName=${data.User}&strPassWord=${data.PassWord}`,
+    method: 'get',
+  })
+}
+
+// 删除用户
+export function deleteUser(data) {
+  return request({
+    url:`/Authorize/DeleteUserInfo?strUserName=${data.User}`,
+    method: 'get',
+  })
+}
+
+// 设置用户权限
+export function addAuthority(data) {
+  return request({
+    url: `/Authorize/AddUserAuthority?strUserName=${data.User}&strAuthorityCode=${data.strAuthorityCode}`,
+    method: 'get',
+  })
+}
+
 export function getInfo(data) {
   return request({
     url: '/User/profile',
@@ -26,10 +50,6 @@ export function getInfo(data) {
   })
 }
 
-/**
- * 更新密码
- * **/
- console.log("进入api里面的user.js的updatePassword")
 export function updatePassword(data) {
   return request({
     url: '/User/UpdatePass',

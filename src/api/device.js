@@ -5,7 +5,6 @@ import request from '@/utils/request'
  * **/
 
 export function getDeviceList(params) {
-  console.log("params为",params)
   return request({
     url: '/Device/GetDeviceInfo',
     // params // 地址参数 查询参数
@@ -14,9 +13,6 @@ export function getDeviceList(params) {
   })
 }
 
-/**
- * 导出员工的excel
- * **/
 
 export function exportEmployee() {
   return request({
@@ -25,10 +21,6 @@ export function exportEmployee() {
     responseType: 'blob' // 使用blob接收二进制文件流
   })
 }
-
-/**
- * 下载员工导入模版
- * **/
 
 export function getExportTemplate() {
   return request({
@@ -96,24 +88,4 @@ export function updateDevice(data) {
   })
 }
 
-/**
- * 获取可用的角色
- * **/
 
-export function getEnableRoleList() {
-  return request({
-    url: '/sys/role/list/enabled'
-  })
-}
-
-/**
- * 分配员工角色
- * ***/
-
-export function assignRole(data) {
-  return request({
-    url: '/sys/user/assignRoles',
-    method: 'put',
-    data
-  })
-}

@@ -1,58 +1,49 @@
 <template>
-<div>
-  <div class="container">
-    <div class="app-container">
-      <div class="right">
-        <el-row class="opeate-tools" type="flex" justify="end">
-          <el-button size="mini" type="primary" @click="addDialog=true">添加设备</el-button>
-          <el-button size="mini" @click="showExcelDialog = true">excel导入</el-button>
-          <el-button size="mini" @click="exportEmployee">excel导出</el-button>
-        </el-row>
-        <!-- 表格组件 -->
-        <el-table :data="list">
-          <el-table-column prop="ID" label="序号" sortable />
-          <el-table-column prop="devicename" label="设备名称" />
-          <el-table-column prop="IPAddress" label="IP地址" width="140px" />
-          <el-table-column prop="devicetype" label="设备类型"  />
-          <el-table-column prop="protocol" label="通讯协议" />
-          <el-table-column prop="status" label="设备状态" >
-            <template v-slot="{ row }">
-              <span v-if="row.status == 1" >正常</span >
-              <span v-else-if="row.status == 2">故障</span>
-              <span v-else>无</span>
-            </template>
-          </el-table-column>
-          <el-table-column prop="isenable" label="启用/停用" :key="Math.random()" >
-            <template v-slot="{row}"> 
-              <span v-if="row.isenable == 1">启用</span>
-              <span v-else-if="row.isenable == 2">停用</span> 
-              <span v-else>无</span>
-            </template> 
-          </el-table-column>
-          <el-table-column label="操作" width="280px">
-            <template v-slot="{ row }">
-              <el-button size="mini" type="text" @click="btnCheck(row.ID)">查看</el-button>
-              <el-button size="mini" type="text" @click="btnUpate(row.ID)">编辑</el-button>
-              <el-button size="mini" type="text" @click="btnDel(row.ID)">删除</el-button>
-            </template>
-          </el-table-column>
-
+  <div class="devicecontainer">
+    <div class="devicepicker">
+      <h5>设备名称:</h5>
+      &nbsp;
+      <el-select v-model="dateValue" clearable placeholder="全部站点" size="medium" style="width: 150px;"  @change="typeSearch()">
+      <el-option v-for="item in warningtype" :key="item.value" :label="item.label" :value="item.value">
+      </el-option>
+      </el-select>
+      &nbsp;
+      <h5>时间范围:</h5>
+      <el-date-picker v-model="valuetime" type="daterange" range-separator="至" start-placeholder="开始日期" end-placeholder="结束日期" size="medium" @change="submitDateTime()">
+      </el-date-picker>
+      &nbsp;&nbsp;
+      <div  class="pickerbutton">
+        <el-button size="mini" type="primary" icon="el-icon-search"   @click="">查询</el-button>
+        <el-button size="mini" type="info"  icon="el-icon-refresh"   @click=""> 重置</el-button>
+        <el-button size="mini" type="primary" icon="el-icon-share"   @click=""> 导出</el-button>
+        <el-button type="info" size="mini" icon="el-icon-refresh-right" >刷新</el-button>
+      </div>
+    </div>
+    <div class="devicetable">
+        <el-table :data="list" :header-cell-style="{background:'#ebf1f6'}" :cell-style="{background:'#ebf1f6'}">
+          <el-table-column prop="id" label="序号" sortable align="left"   >
+              <template slot-scope="{ $index }">
+              <span>{{ $index + 1 }}</span>
+              </template>
+            </el-table-column>
+          <el-table-column prop="name" label="设备名称" width="300px" align="center" />
+          <el-table-column prop="container" label="内容" width="1000px"  align="center"/>
+          <el-table-column prop="number" label="运行次数" width="240px" align="center"/>
+          <el-table-column prop="number" label="最大次数" width="240px" align="center"/>
         </el-table>
-        <!-- 分页 -->
-        <el-row style="height: 60px" align="middle" type="flex" justify="end">
+    </div>
+    <el-row style="height: 60px" align="middle" type="flex" justify="end">
           <el-pagination
-            layout="total,prev, pager, next"
+            background
+            layout="total,sizes,prev, pager, next,jumper"
             :total="total"
             :current-page="queryParams.page"
             :page-size="queryParams.pagesize"
             @current-change="changePage"
+            @size-change="handleSizeChange"
+            class="pagination-footer"
           />
-        </el-row>
-      </div>
-    </div>
-    <!-- 放置导入组件 -->
-    <import-excel :show-excel-dialog.sync="showExcelDialog" @uploadSuccess="getEmployeeList" />
-    <!-- 查看弹窗 -->
+    </el-row>
     <el-dialog :visible.sync="showDialog" title="查看设备信息" center>
       <el-form :model='Info' label-width='80px'>
                     <el-form-item label='序号'>
@@ -72,7 +63,6 @@
                     </el-form-item>
                 </el-form>
     </el-dialog>
-    <!-- 编辑弹窗 -->
     <el-dialog :visible.sync="showupDialog" title="修改设备信息" center>
       <el-form :model='Info' label-width='80px'>
                     <el-form-item label='序号'>
@@ -99,7 +89,6 @@
         </el-col>
       </el-row> 
     </el-dialog>
-    <!-- 添加弹窗 -->
     <el-dialog :visible.sync="addDialog" title="添加设备信息" center>
       <el-form :model='newInfo' label-width='80px'>
                     <el-form-item label='序号'>
@@ -118,7 +107,6 @@
                         <el-input v-model='newInfo.protocol' ></el-input>
                     </el-form-item>
                 </el-form>
-      <!-- 确定和取消按钮 -->
       <el-row slot="footer" type="flex" justify="center">
         <el-col :span="6">
           <el-button type="primary" size="mini" @click="AddCommit(newInfo)">确定</el-button>
@@ -127,15 +115,13 @@
       </el-row> 
     </el-dialog>
   </div>
-  <router-view></router-view>
-</div>
 </template>
 <script>
 import { checkdeviceInfo, getDeviceList ,updateDevice ,delDevice,addDevice} from '@/api/device'
 import FileSaver from 'file-saver'
 import ImportExcel from './components/import-excel.vue'
 export default {
-  name: 'deviceinfo',
+  name: '',
   components: {
     ImportExcel
   },
@@ -146,7 +132,8 @@ export default {
         pagesize: 10,
       },
       total: 0, // 记录设备的总数
-      list: [], // 存储设备列表数据
+      list: [{id:0,name:"阻挡器",container:"抬起",number:50},
+      {id:1,name:"堆垛机",container:"行走距离",number:500}], // 存储设备列表数据
       showExcelDialog: false, // 控制excel的弹层显示和隐藏
       showDialog: false, // 用来控制查看弹层的显示
       showupDialog: false, // 用来控制修改弹层的显示
@@ -158,24 +145,8 @@ export default {
     }
   },
   created() {
-    console.log("进入生命周期函数created()")
-    console.log("route为",this.$route)
-    console.log("router为",this.$router)
-    this.getDeviceList()
   },
   methods: {
-    // 获取设备列表的方法
-    async getDeviceList() {
-      console.log("进入getDeviceList方法")
-      const {total,info} = await getDeviceList(this.queryParams)
-      console.log("打印设备列表信息",{info})
-      console.log("打印记录条数",{total})
-      console.log(info[0])
-      this.list = info
-      console.log("list",this.list)
-      this.total = total
-      console.log("rows",this.total)
-    },
     // 切换页码
     changePage(newPage) {
       this.queryParams.page = newPage // 赋值新页码
@@ -244,16 +215,27 @@ export default {
 </script>
 
 <style lang="scss" scoped>
-.app-container {
-  background: #fff;
-  display: flex;
-  .right {
+.devicecontainer {
+  background-color:#ebf1f6;
+  .devicepicker{
+      padding: 5px;
+      display: flex;
+      margin:1px ;
+      align-items: center;
+    }
+  .devicetable {
     flex: 1;
     padding: 20px;
-    .opeate-tools {
-      margin:10px ;
-    }
+ 
   }
-}
+  .pagination-footer{
+        position: absolute;
+        text-align: center;
+        background-color:#ebf1f6;
+        left: 0;
+        bottom: 0;
+        width: 100%;
+      }
 
+}
 </style>

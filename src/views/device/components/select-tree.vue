@@ -10,7 +10,7 @@
   />
 </template>
 <script>
-import { getDepartment } from '@/api/department'
+
 import { transListToTreeData } from '@/utils'
 export default {
   props: {
@@ -29,12 +29,12 @@ export default {
     }
   },
   created() {
-    this.getDepartment()
+    // this.getDepartment()
   },
   methods: {
-    async getDepartment() {
-      this.treeData = transListToTreeData(await getDepartment(), 0) // 将组织架构的数据 转化树形赋值给treeData
-    },
+    // async getDepartment() {
+    //   this.treeData = transListToTreeData(await getDepartment(), 0) // 将组织架构的数据 转化树形赋值给treeData
+    // },
     changeValue(list) {
       // 取到数组的最后一次
       if (list.length > 0) {

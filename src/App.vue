@@ -1,6 +1,5 @@
 <template>
   <div id="app">
-    <!-- 定义路由的占位符 -->
     <router-view />
   </div>
 </template>
@@ -16,5 +15,9 @@ export default {
  
  background: blue !important;    
 
+}
+
+body {
+  background-color:#ebf1f6;
 }
 </style>

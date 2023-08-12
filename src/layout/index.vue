@@ -14,29 +14,29 @@
 <script>
 import { Navbar, Sidebar, AppMain } from './components'
 import ResizeMixin from './mixin/ResizeHandler'
-import LanguageSelect from './components/selectLang'
-
 export default {
   name: 'Layout',
   components: {
     Navbar,
     Sidebar,
     AppMain,
-    LanguageSelect
-
   },
   mixins: [ResizeMixin], //局部混入
   computed: {
     sidebar() {
+      console.log("进入layout的index里面的sidebar()计算属性")
       return this.$store.state.app.sidebar
     },
     device() {
+      console.log("进入layout的index里面的device()计算属性")
       return this.$store.state.app.device
     },
     fixedHeader() {
+      console.log("进入layout的index里面的fixedHeader()计算属性")
       return this.$store.state.settings.fixedHeader
     },
     classObj() {
+      console.log("进入layout的index里面的classObj()计算属性")
       return {
         hideSidebar: !this.sidebar.opened,
         openSidebar: this.sidebar.opened,
@@ -47,6 +47,8 @@ export default {
   },
   methods: {
     handleClickOutside() {
+      console.log("进入layout的index里面的methods的handleClickOutside()")
+      console.log("使用dispatch调用app.js里面的action的closeSideBar")
       this.$store.dispatch('app/closeSideBar', { withoutAnimation: false })
     }
   }

@@ -2,43 +2,84 @@ import router from '@/router'
 import nprogress from 'nprogress'
 import 'nprogress/nprogress.css'
 import store from '@/store'
+import { Message } from 'element-ui'
 import { asyncRoutes } from '@/router'
+import { removeToken } from './utils/auth'
 
+const whiteList = ['/login','/404','/403']
 
-const whiteList = ['/login', '/404']
 router.beforeEach(async(to, from, next) => {
-  nprogress.start() 
-  if (store.getters.token) {
-    if (to.path === '/login') {
-      next('/dashboard/index') 
-      nprogress.done()
-    } else {
-      if (!store.getters.userId) {
-        const { roles } = await store.dispatch('user/getUserInfo')
-        console.log(roles.menus) // 数组 不确定 可能是8个 1个 0个
-        console.log(asyncRoutes) // 数组 8个
-        const filterRoutes = asyncRoutes.filter(item => {
-          // return true/false
-          return roles.menus.includes(item.name)
-        }) // 筛选后的路由
-        store.commit('user/setRoutes', filterRoutes)
-        router.addRoutes([...filterRoutes, { path: '*', redirect: '/404', hidden: true }]) // 添加动态路由信息到路由表
-        // router添加动态路由之后 需要转发一下
-        next(to.path) // 目的是让路由拥有信息 router的已知缺陷
-      } else {
-        next() // 放过
+
+    nprogress.start()
+
+    console.log("进入前置路由守卫判断是否有用户token")
+    console.log("用户token为",store.getters.token)
+
+    if (store.getters.token) 
+    {
+      console.log("有用户token")
+      console.log("判断是否去登录页")
+      console.log("to.path为",to.path)
+      if (to.path==='/login') {
+        console.log("有用户token需去往登录页")
+        console.log("放行去首页")
+        Message({ type: 'success',message: "当前用户已登录"})
+        next('/') 
+      }
+      else {
+        console.log("有用户token,不是去往登录页")
+        console.log("判断store中的name是否为空")
+        console.log("store中的name为",store.getters.name)
+        if (!store.getters.name){
+          console.log("store中的name为空，使用dispatch调用actions中的getUserInfo")
+          await store.dispatch('user/getUserInfo')
+          next()
+        }
+        else{ 
+          console.log("store中的name为不为空")
+          console.log("store中的name为不为空，判断to.path是否在白名单中")
+          if(whiteList.includes(to.path))
+          {
+            console.log("store中的name为不为空，to.path在白名单中")
+            next()
+          }
+          else{
+            console.log("store中的name为不为空，to.path不在白名单中,判断requiresAuth是否为true")
+            if(to.meta.requiresAuth===false)
+            {
+            console.log("store中的name为不为空，to.path不在白名单中,requiresAuth为false")
+            next()
+            }
+            else
+            {
+            console.log("store中的name为不为空，to.path不在白名单中,requiresAuth为true")
+                if(to.meta.roles.indexOf(store.getters.name)<=-1){
+                  console.log("该页面没有权限访问")
+                  next('/403')
+                }
+                else{
+                  console.log("该页面有权限访问")
+                  next()
+                }
+            }
+          }
+        }
       }
     }
-  } else {
-    if (whiteList.includes(to.path)) {
-      next()
-    } else {
-      next('/login') // 中转到登录页
-      nprogress.done()
+   else 
+    {
+        console.log("没有用户token，to.path是否在白名单中")
+        if (whiteList.indexOf(to.path) !== -1) {
+          console.log("没有用户token，to.path在白名单中")
+          next()
+        } else {
+          console.log("没有用户token，to.path不在白名单中")
+          next('/login')
+          nprogress.done()
+        }
     }
   }
-})
-
+)
 
 router.afterEach(() => {
   nprogress.done()
